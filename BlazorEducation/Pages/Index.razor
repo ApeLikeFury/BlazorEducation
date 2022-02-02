@@ -1,0 +1,126 @@
+﻿@page "/"
+
+<h1>Totally legitimate Bank!</h1>
+
+Current account
+<br />
+<br />
+<p>
+    Name: @harry.name
+</p>
+<p>
+    Amount: $@harry.balance
+</p>
+<p>
+    <input type="number"
+           @bind-value="harry.balance"
+           @bind-value:event="oninput" />
+</p>
+<p>
+    <label>
+        <input type="checkbox"
+               @bind-value="harry.active" />
+        &nbsp;Is Active
+
+    </label>
+    <br />
+    Is Active: @harry.active
+</p>
+Transactions
+<p>
+    <ul>
+        @foreach (var transaction in harry.transactions)
+        {
+        <li>
+            Date: @transaction.dateTime       Amount: @transaction.amount       Pending: @transaction.isPending
+            <input type="button" value="Delete" onclick="msg()">
+        </li> 
+        }
+    </ul>
+</p>
+
+@code{
+    struct Transaction
+    {
+        public DateTime dateTime;
+        public decimal amount;
+        public bool isPending;
+
+        public Transaction(DateTime dateTime, decimal amount, bool isPending)
+        {
+            this.dateTime = dateTime;
+            this.amount = amount;
+            this.isPending = isPending;
+        }
+    }
+
+    class client
+    {
+        private string person;
+        private decimal bankBalance;
+        private bool isActive;
+
+        public List<Transaction> transactions = new List<Transaction>() { };
+
+        public client(string name, decimal bankBalance, bool isActive)
+        {
+            this.person = name;
+            this.bankBalance = bankBalance;
+            this.isActive = isActive;
+
+            makeTransactions(100);
+        }
+
+        private int makeTransactions(int transactionCount)
+        {
+
+            for (int i = 0; i < 10; i++)
+            {
+                DateTime dateTime = new DateTime(2022, 02, 02);
+                Transaction tempTransaction = new Transaction(dateTime, 1200, false);
+                transactions.Add(tempTransaction);
+            }
+
+            return 0;
+        }
+
+        public string name
+        {
+            get
+            {
+                return person;
+            }
+            set
+            {
+                person = value;
+            }
+        }
+        public decimal balance
+        {
+            get
+            {
+                return bankBalance;
+            }
+            set
+            {
+                bankBalance = value;
+            }
+        }
+        public bool active
+        {
+            get
+            {
+                return isActive;
+            }
+            set
+            {
+                isActive = value;
+            }
+        }
+    }
+
+    client harry = new client("Harry Byrne", 13000, true);
+
+
+}
+
